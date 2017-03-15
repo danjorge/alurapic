@@ -1,25 +1,25 @@
-import {Component, ElementRef, ViewChild, AfterViewInit, Output, Input, EventEmitter} from '@angular/core';
+import {Component, ElementRef, Output, Input, EventEmitter, AfterViewInit} from '@angular/core';
 
 
 @Component({
+    moduleId: module.id,
     selector: 'modal',
-    templateUrl: 'app/modal/components/modal.html'
+    templateUrl: './modal.component.html'
 })
-export class Modal implements AfterViewInit{
-    
+export class ModalComponent implements AfterViewInit{ 
+
     private _element: ElementRef;
-    
+
     @Input() private titulo: string = 'Tem certeza?';
     @Input() private frase: string;
-    @Output() confirma: EventEmitter<any> = new EventEmitter<any>();
-   
+    @Output() confirma = new EventEmitter();
+
     constructor(private element: ElementRef) {
         this._element = element;
     }
-    
-    // tem quer ser ngAfterViewInit caso contrário o dialog não esconderá o template, porque ele ainda não foi criado
-    ngAfterViewInit() {
-        
+
+     ngAfterViewInit() {
+
         $(this.element.nativeElement).dialog({
             title: this.titulo,
             autoOpen: false,
@@ -31,15 +31,14 @@ export class Modal implements AfterViewInit{
                 },
                 Confirmar: ()=> {
                     $(this.element.nativeElement).dialog( "close" );
-                    this.confirma.emit(null);
+                    this.confirma.emit();
                 }
             }
         });
-     
     }
-    
+
     show() {    
-           
-       $(this._element.nativeElement).dialog('open');
+
+        $(this._element.nativeElement).dialog('open');
     }
 }
